@@ -4,7 +4,7 @@ import { Box, IconButton, InputBase, styled, TableCell, Popper } from '@mui/mate
 import AlignHorizontalRightRoundedIcon from '@mui/icons-material/AlignHorizontalRightRounded'
 import AlignHorizontalLeftRoundedIcon from '@mui/icons-material/AlignHorizontalLeftRounded'
 import AlignHorizontalCenterRoundedIcon from '@mui/icons-material/AlignHorizontalCenterRounded'
-import { TableContext } from './App'
+import { type ContextType, TableContext } from './App'
 import { getExportData } from './utils'
 
 interface HeaderProps {
@@ -17,7 +17,7 @@ export const GridTable = styled('table')(() => ({
 }))
 
 export const GridHeader: React.FC<HeaderProps> = ({ initialValue, ...props }) => {
-  const { tableRef } = useContext(TableContext)
+  const { tableRef } = useContext(TableContext) as ContextType
   const [value, setValue] = useState(initialValue || 'Header')
   const [isEditing, setIsEditing] = useState(false)
   const [showAligns, setShowAligns] = useState(false)
@@ -161,7 +161,7 @@ export const GridHeader: React.FC<HeaderProps> = ({ initialValue, ...props }) =>
 }
 
 export const GridCell: React.FC<HeaderProps> = ({ initialValue, ...props }) => {
-  const { cellPadding, centerCell, firstColumnIsHeader, tableRef } = useContext(TableContext)
+  const { cellPadding, centerCell, firstColumnIsHeader, tableRef } = useContext(TableContext) as ContextType
   const [value, setValue] = useState(initialValue || '')
   const [isEditing, setIsEditing] = useState(false)
 
@@ -177,6 +177,7 @@ export const GridCell: React.FC<HeaderProps> = ({ initialValue, ...props }) => {
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     setIsEditing(false)
+    console.log(event.target.value)
     if (tableRef) {
       const data = getExportData(tableRef)
 
@@ -211,7 +212,7 @@ export const GridCell: React.FC<HeaderProps> = ({ initialValue, ...props }) => {
     <TableCell
       {...props}
       sx={{
-        padding: `${cellPadding}px 12px`,
+        padding: `${cellPadding === 0 ? 6 : cellPadding}px 12px`,
         width: '100%',
         borderBottom: '0',
         ...(firstColumnIsHeader && {
@@ -248,6 +249,7 @@ export const GridCell: React.FC<HeaderProps> = ({ initialValue, ...props }) => {
             transition: 'padding 0.2s ease, background 0.2s ease',
             borderRadius: '12px',
             boxSizing: 'border-box',
+            whiteSpace: 'pre',
             ...(centerCell && {
               justifyContent: 'center',
               textAlign: 'center',
@@ -272,15 +274,18 @@ export const GridCell: React.FC<HeaderProps> = ({ initialValue, ...props }) => {
           value={value}
           onChange={handleChange}
           onBlur={handleBlur}
-          onKeyDown={handleInputKeyDown}
+          // onKeyDown={handleInputKeyDown}
           inputRef={inputRef}
+          multiline
           sx={{
             fontSize: '14px',
             fontFamily: 'Good Headline Pro',
             background: 'rgba(235, 60, 0, 0.05)',
+            border: '1px solid rgba(235, 60, 0, 0.2)',
             borderRadius: '12px',
             padding: '2px 8px',
             width: '100%',
+            height: '100%',
             '& input': {
               width: '100%',
             },

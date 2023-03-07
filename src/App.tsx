@@ -8,19 +8,19 @@ import { GridCell, GridHeader } from './GridComponents'
 import Sidebar from './Sidebar'
 import { type DataObject } from './utils'
 
-interface ContextProps {
-  cellPadding?: number
-  firstColumnIsHeader?: boolean
-  centerCell?: boolean
+export interface ContextType {
+  cellPadding: number
+  firstColumnIsHeader: boolean
+  centerCell: boolean
   data: null[]
   columns: Array<ColumnDef<any, unknown>>
-  tableRef?: React.RefObject<HTMLTableElement>
-  setCellPadding?: React.Dispatch<React.SetStateAction<number>>
-  setFirstColumnIsHeader?: React.Dispatch<React.SetStateAction<boolean>>
-  setCenterCell?: React.Dispatch<React.SetStateAction<boolean>>
-  setData?: React.Dispatch<React.SetStateAction<null[]>>
-  setColumns?: React.Dispatch<React.SetStateAction<Array<ColumnDef<any, unknown>>>>
-  exportedData?: DataObject | null
+  tableRef: React.RefObject<HTMLTableElement>
+  setCellPadding: React.Dispatch<React.SetStateAction<number>>
+  setFirstColumnIsHeader: React.Dispatch<React.SetStateAction<boolean>>
+  setCenterCell: React.Dispatch<React.SetStateAction<boolean>>
+  setData: React.Dispatch<React.SetStateAction<null[]>>
+  setColumns: React.Dispatch<React.SetStateAction<Array<ColumnDef<any, unknown>>>>
+  exportedData: DataObject | null
 }
 
 const initialColumns: Array<ColumnDef<any>> = [
@@ -31,10 +31,7 @@ const initialColumns: Array<ColumnDef<any>> = [
   },
 ]
 
-export const TableContext = createContext<ContextProps>({
-  data: [null],
-  columns: initialColumns,
-})
+export const TableContext = createContext<ContextType | null>(null)
 
 const App = () => {
   const rawSavedData = localStorage.getItem('tableData')

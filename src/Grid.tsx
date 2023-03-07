@@ -4,7 +4,7 @@ import React, { useContext, forwardRef } from 'react'
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
 
 import { GridCell, GridTable } from './GridComponents'
-import { TableContext } from './App'
+import { type ContextType, TableContext } from './App'
 import { Box } from '@mui/material'
 import { type DataObject } from './utils'
 
@@ -13,9 +13,7 @@ interface GridProps {
 }
 
 const Grid = forwardRef<HTMLDivElement, GridProps>(({ exportedData }, ref) => {
-  const { data, columns } = useContext(TableContext)
-
-  console.log({ exportedData })
+  const { data, columns } = useContext(TableContext) as ContextType
 
   const rawSavedData = localStorage.getItem('tableData')
   const savedData: DataObject = rawSavedData ? JSON.parse(rawSavedData) : null

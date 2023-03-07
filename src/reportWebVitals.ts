@@ -1,3 +1,4 @@
+/* eslint-disable promise/always-return */
 /* eslint-disable promise/catch-or-return */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { type ReportHandler } from 'web-vitals'

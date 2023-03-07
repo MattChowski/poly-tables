@@ -23,7 +23,7 @@ import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
 import { type ColumnDef } from '@tanstack/react-table'
 
 import { GridCell, GridHeader } from './GridComponents'
-import { TableContext } from './App'
+import { type ContextType, TableContext } from './App'
 import { type DataObject, getExportData } from './utils'
 
 interface SidebarProps {
@@ -83,7 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setExportData, exportedData }) => {
     setData,
     setColumns,
     setCellPadding,
-  } = useContext(TableContext)
+  } = useContext(TableContext) as ContextType
   const [filename, setFilename] = useState('')
 
   const handleAddColumn = () => {
@@ -171,9 +171,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setExportData, exportedData }) => {
       const data = getExportData(tableRef)
       localStorage.setItem('tableData', JSON.stringify(data))
 
-      const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-        JSON.stringify(data)
-      )}`
+      const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(data))}`
       const link = document.createElement('a')
       link.href = jsonString
       link.download = `${filename || 'table-data'}.json`
@@ -190,15 +188,11 @@ const Sidebar: React.FC<SidebarProps> = ({ setExportData, exportedData }) => {
           const loadedData: DataObject = JSON.parse(e.target?.result)
           loadedData.dateCreated = Date.now()
 
-          const newHeaders: Array<ColumnDef<any>> = loadedData.headers.map(
-            (header, index) => ({
-              id: `${index + 1}`,
-              cell: (info) => <GridCell initialValue='lol' />,
-              header: () => (
-                <GridHeader data-id={`${index + 1}`} initialValue={header} />
-              ),
-            })
-          )
+          const newHeaders: Array<ColumnDef<any>> = loadedData.headers.map((header, index) => ({
+            id: `${index + 1}`,
+            cell: (info) => <GridCell initialValue='lol' />,
+            header: () => <GridHeader data-id={`${index + 1}`} initialValue={header} />,
+          }))
 
           if (setColumns != null && setData != null) {
             setColumns(newHeaders)
@@ -210,9 +204,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setExportData, exportedData }) => {
     }
   }
 
-  const handleFilenameChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleFilenameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFilename(e.target.value)
   }
 
@@ -276,7 +268,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setExportData, exportedData }) => {
           }}
         >
           <RemoveIcon />
-          <Slider onChange={handleChangeCellPadding} value={cellPadding} />
+          <Slider onChange={handleChangeCellPadding} value={cellPadding} min={6} max={50} />
           <AddIcon />
         </Stack>
       </Property>
@@ -336,16 +328,10 @@ const Sidebar: React.FC<SidebarProps> = ({ setExportData, exportedData }) => {
               label='Filename'
               variant='outlined'
             />
-            <StyledButton
-              onClick={getTableData}
-              endIcon={<FileDownloadOutlinedIcon />}
-            >
+            <StyledButton onClick={getTableData} endIcon={<FileDownloadOutlinedIcon />}>
               Export Data
             </StyledButton>
-            <StyledButton
-              component='label'
-              endIcon={<FileUploadOutlinedIcon />}
-            >
+            <StyledButton component='label' endIcon={<FileUploadOutlinedIcon />}>
               Load from file
               <input type='file' hidden onChange={loadData} />
             </StyledButton>
@@ -359,10 +345,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setExportData, exportedData }) => {
             marginTop: '12px',
           }}
         >
-          <StyledButton
-            onClick={handleDownload}
-            endIcon={<ImageOutlinedIcon />}
-          >
+          <StyledButton onClick={handleDownload} endIcon={<ImageOutlinedIcon />}>
             Generate PNG
           </StyledButton>
         </Stack>
