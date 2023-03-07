@@ -1,26 +1,110 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, createContext, useRef, useEffect } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import type { ColumnDef } from '@tanstack/react-table'
+import { Box } from '@mui/material'
+
+import Grid from './Grid'
+import { GridCell, GridHeader } from './GridComponents'
+import Sidebar from './Sidebar'
+import { type DataObject } from './utils'
+
+interface ContextProps {
+  cellPadding?: number
+  firstColumnIsHeader?: boolean
+  centerCell?: boolean
+  data: null[]
+  columns: Array<ColumnDef<any, unknown>>
+  tableRef?: React.RefObject<HTMLTableElement>
+  setCellPadding?: React.Dispatch<React.SetStateAction<number>>
+  setFirstColumnIsHeader?: React.Dispatch<React.SetStateAction<boolean>>
+  setCenterCell?: React.Dispatch<React.SetStateAction<boolean>>
+  setData?: React.Dispatch<React.SetStateAction<null[]>>
+  setColumns?: React.Dispatch<React.SetStateAction<Array<ColumnDef<any, unknown>>>>
+  exportedData?: DataObject | null
 }
 
-export default App;
+const initialColumns: Array<ColumnDef<any>> = [
+  {
+    id: '1',
+    cell: (info) => info.getValue(),
+    header: () => <GridHeader data-id='0' initialValue='Header' />,
+  },
+]
+
+export const TableContext = createContext<ContextProps>({
+  data: [null],
+  columns: initialColumns,
+})
+
+const App = () => {
+  const rawSavedData = localStorage.getItem('tableData')
+  const savedData: DataObject = rawSavedData ? JSON.parse(rawSavedData) : null
+
+  const [data, setData] = useState(() => {
+    if (savedData) {
+      return Array(savedData.rows.length).fill(null)
+    }
+    return [null]
+  })
+
+  const [columns, setColumns] = useState(() => {
+    if (savedData) {
+      const newHeaders: Array<ColumnDef<any>> = savedData.headers.map((header, index) => ({
+        id: `${index + 1}`,
+        cell: (info) => <GridCell initialValue='lol' />,
+        header: () => <GridHeader data-id={`${index + 1}`} initialValue={header} />,
+      }))
+      return newHeaders
+    }
+    return initialColumns
+  })
+  const [cellPadding, setCellPadding] = useState(4)
+  const [firstColumnIsHeader, setFirstColumnIsHeader] = useState(false)
+  const [centerCell, setCenterCell] = useState(false)
+  const [exportedData, setExportData] = useState<DataObject | null>(null)
+
+  const tableRef = useRef<HTMLTableElement>(null)
+
+  useEffect(() => {
+    console.log({ exportedData })
+  })
+
+  return (
+    <TableContext.Provider
+      value={{
+        cellPadding,
+        firstColumnIsHeader,
+        centerCell,
+        data,
+        columns,
+        tableRef,
+        setCellPadding,
+        setFirstColumnIsHeader,
+        setCenterCell,
+        setData,
+        setColumns,
+        exportedData,
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+        }}
+      >
+        <Sidebar setExportData={setExportData} exportedData={exportedData} />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: '1',
+          }}
+        >
+          <Grid ref={tableRef} exportedData={exportedData} />
+        </Box>
+      </Box>
+    </TableContext.Provider>
+  )
+}
+
+export default App
