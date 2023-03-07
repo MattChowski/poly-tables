@@ -1,17 +1,14 @@
 {
   "files": {
-    "main.css": "/poly-tables/static/css/main.594744d2.css",
-    "main.js": "/poly-tables/static/js/main.15ea485d.js",
-    "static/js/787.809dbe12.chunk.js": "/poly-tables/static/js/787.809dbe12.chunk.js",
+    "main.css": "/poly-tables/static/css/main.268f7eda.css",
+    "main.js": "/poly-tables/static/js/main.b47dae6b.js",
+    "static/js/27.580e0bdf.chunk.js": "/poly-tables/static/js/27.580e0bdf.chunk.js",
     "static/media/GoodHeadlinePro Medium Regular.ttf": "/poly-tables/static/media/GoodHeadlinePro Medium Regular.307f3a392e3a2017fbb8.ttf",
     "static/media/GoodHeadlinePro Regular.otf": "/poly-tables/static/media/GoodHeadlinePro Regular.074971ffcee3c0cd42f2.otf",
-    "index.html": "/poly-tables/index.html",
-    "main.594744d2.css.map": "/poly-tables/static/css/main.594744d2.css.map",
-    "main.15ea485d.js.map": "/poly-tables/static/js/main.15ea485d.js.map",
-    "787.809dbe12.chunk.js.map": "/poly-tables/static/js/787.809dbe12.chunk.js.map"
+    "index.html": "/poly-tables/index.html"
   },
   "entrypoints": [
-    "static/css/main.594744d2.css",
-    "static/js/main.15ea485d.js"
+    "static/css/main.268f7eda.css",
+    "static/js/main.b47dae6b.js"
   ]
 }
