@@ -249,7 +249,7 @@ export const GridCell: React.FC<HeaderProps> = ({ initialValue, ...props }) => {
             transition: 'padding 0.2s ease, background 0.2s ease',
             borderRadius: '12px',
             boxSizing: 'border-box',
-            whiteSpace: 'pre',
+            whiteSpace: 'pre-line',
             ...(centerCell && {
               justifyContent: 'center',
               textAlign: 'center',
